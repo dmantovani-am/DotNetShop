@@ -1,0 +1,33 @@
+﻿@page "/Products/{id:int}"
+@model DotNetShop.Pages.ProductModel
+@{
+    var product = Model.Product!;
+}
+
+<section data-bs-version="5.1" class="content2 cid-tsEQSCqggh" id="content2-2">
+    <div class="container">
+        <div class="card-wrapper">
+            <div class="row align-items-center">
+                <div class="col-12 col-lg-6">
+                    <div class="image-wrapper">
+                        <img src="~/Images/@product.Image" alt="Website Builder">
+                    </div>
+                </div>
+                <div class="col-12 col-lg">
+                    <div class="text-box">
+                        <h5 class="mbr-title mbr-fonts-style display-2">
+                            <strong>@product.Title</strong>
+                        </h5>
+                        <p class="mbr-text mbr-fonts-style display-7">@product.Description</p>
+                        <div class="cost">
+                            <span class="currentcost mbr-fonts-style pr-2 display-2">@product.Price $</span>
+                        </div>
+                        <div class="mbr-section-btn pt-3"><a href="" class="btn btn-primary display-4"><span class="mbrib-cart-add mbr-iconfont mbr-iconfont-btn"></span>Add to cart&nbsp;</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
