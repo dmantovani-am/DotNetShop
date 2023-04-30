@@ -4,12 +4,17 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSession();
+
 AddRepository(builder.Services);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+
+app.UseSession();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -42,4 +47,5 @@ void AddRepository(IServiceCollection services)
     services.AddScoped<DataContext>(_ => dataContext);
     services.AddScoped<IProductRepository>(_ => new ProductRepository(dataContext));
     services.AddScoped<IRepository<Category>>(_ => new DataContextRepository<Category>(dataContext));
+    services.AddScoped<ICartRepository>(CartRepository.GetCart);
 }
