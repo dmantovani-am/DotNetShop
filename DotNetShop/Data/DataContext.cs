@@ -13,6 +13,8 @@ public class DataContext : DbContext
 
     public DbSet<Category> Categories => Set<Category>();
 
-    public DbSet<CartItem> CartItems { get; set; }
+    public DbSet<CartItem> CartItems => Set<CartItem>();
+
+    public DbSet<Order> Orders => Set<Order>();
 }
 
