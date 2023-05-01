@@ -7,9 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
-AddRepository(builder.Services);
-
-// Add services to the container.
+AddRepository(builder.Services, builder.Configuration);
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -26,26 +24,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapRazorPages();
 
 app.Run();
 
-void AddRepository(IServiceCollection services)
+void AddRepository(IServiceCollection services, ConfigurationManager configuration)
 {
-    var options = new DbContextOptionsBuilder<DataContext>()
-        .UseSqlite("Data Source=DotNetShop.sqlite;")
-        .Options;
-
-    var dataContext = new DataContext(options);
-    dataContext.Database.EnsureCreated();
-
-    services.AddScoped<DataContext>(_ => dataContext);
-    services.AddScoped<IProductRepository>(_ => new ProductRepository(dataContext));
-    services.AddScoped<IRepository<Category>>(_ => new DataContextRepository<Category>(dataContext));
-    services.AddScoped<ICartRepository>(CartRepository.GetCart);
+    services.AddDbContext<DataContext>(options => options.UseSqlite(configuration.GetConnectionString("(default)")));
+    services.AddScoped<IProductRepository, ProductRepository>();
+    services.AddScoped<ICartRepository, CartRepository>();
 }

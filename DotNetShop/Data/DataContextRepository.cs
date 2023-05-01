@@ -2,7 +2,7 @@
 
 namespace DotNetShop.Data;
 
-class DataContextRepository<T> : IRepository<T>
+public class DataContextRepository<T> : IRepository<T>
     where T : class, IHasId
 {
     readonly DbContext _dataContext;

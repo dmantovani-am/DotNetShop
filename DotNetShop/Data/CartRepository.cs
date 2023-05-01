@@ -8,19 +8,14 @@ class CartRepository : ICartRepository
 
     required public string CartId { get; set; }
 
-    public static ICartRepository GetCart(IServiceProvider services)
+    public CartRepository(DataContext context, IHttpContextAccessor httpContextAccessor)
     {
-        var session = services.GetRequiredService<IHttpContextAccessor>()?.HttpContext?.Session;
-        var context = services.GetService<DataContext>() ?? throw new Exception("Error initializing DataContext");
+        var session = httpContextAccessor.HttpContext?.Session ?? throw new NullReferenceException("Missing Session");
 
-        string cartId = session?.GetString("CartId") ?? Guid.NewGuid().ToString();
-        session?.SetString("CartId", cartId);
+        var key = nameof(CartId);
+        string cartId = CartId = session?.GetString(key) ?? Guid.NewGuid().ToString();
+        session?.SetString(key, cartId);
 
-        return new CartRepository(context) { CartId = cartId };
-    }
-
-    public CartRepository(DataContext context)
-    {
         _context = context;
     }
 
@@ -70,19 +65,23 @@ class CartRepository : ICartRepository
 
     public async Task<IList<CartItem>> GetItems()
     {
-        return await _context.CartItems.Where(c => c.CartId == CartId).ToListAsync();
+        return await _context.CartItems.Where(c => c.CartId == CartId).Include(p => p.Product).ToListAsync();
     }
 
-    public Task<decimal> GetTotal()
+    public async Task<decimal> GetTotal()
     {
-        var query = _context.CartItems.Where(c => c.CartId == CartId).Include(p => p.Product).Select(c => c.Product.Price * c.Quantity);
-        return query.SumAsync();
+        var rowTotals = await _context.CartItems
+            .Where(c => c.CartId == CartId).Include(p => p.Product)
+            .Select(c => c.Product.Price * c.Quantity)
+            .ToListAsync();
+        
+        return rowTotals.Sum();
     }
 
     Task<CartItem?> GetCartItem(Product product)
     {
         ArgumentNullException.ThrowIfNull(product);
 
-        return _context.CartItems.FirstOrDefaultAsync(p => p.CartId == CartId && p.Id == product.Id);
+        return _context.CartItems.FirstOrDefaultAsync(p => p.CartId == CartId && p.Product.Id == product.Id);
     }
 }

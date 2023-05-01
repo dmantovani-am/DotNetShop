@@ -2,9 +2,9 @@
 
 namespace DotNetShop.Data;
 
-class ProductRepository : DataContextRepository<Product>, IProductRepository
+public class ProductRepository : DataContextRepository<Product>, IProductRepository
 {
-    public ProductRepository(DbContext dataContext) : base(dataContext)
+    public ProductRepository(DataContext dataContext) : base(dataContext)
     { }
 
     public async Task<IEnumerable<Product>> GetTopProducts(int n = 9)
