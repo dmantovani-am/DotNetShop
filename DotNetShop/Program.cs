@@ -9,6 +9,13 @@ var connectionString = builder.Configuration.GetConnectionString("(default)") ??
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<DataContext>();
 
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    var configuration = builder.Configuration;
+    googleOptions.ClientId = configuration["Authentication:Google:ClientId"]!;
+    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
+});
+
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
