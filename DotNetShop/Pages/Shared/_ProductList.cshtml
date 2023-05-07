@@ -12,8 +12,10 @@
                 </a>
             </div>
             <div class="item-content">
-                <h6 class="item-subtitle mbr-fonts-style mt-1 display-7"><strong>@p.Title</strong></h6>
-                <p class="mbr-text mbr-fonts-style mt-3 display-7">@p.Price $</p>
+                <a asp-page="Product" asp-route-id="@p.Id">
+                    <h6 class="item-subtitle mbr-fonts-style mt-1 display-7"><strong>@p.Title</strong></h6>
+                    <p class="mbr-text mbr-fonts-style mt-3 display-7">@p.Price $</p>
+                </a>
             </div>
             <div class="mbr-section-btn item-footer mt-2">
                 <a class="btn item-btn btn-primary display-4" target="_self" asp-page="Cart" asp-page-handler="Add" asp-route-id="@p.Id">
