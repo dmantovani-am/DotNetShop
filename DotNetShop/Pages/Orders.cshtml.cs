@@ -1,8 +1,10 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace DotNetShop.Pages
 {
+    [Authorize]
     public class OrdersModel : PageModel
     {
         readonly IOrderRepository _orderRepository;
