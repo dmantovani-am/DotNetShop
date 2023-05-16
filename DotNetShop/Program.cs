@@ -45,7 +45,6 @@ app.Run();
 
 void AddRepository(IServiceCollection services, ConfigurationManager configuration)
 {
-    services.AddDbContext<DataContext>(options => options.UseSqlite(configuration.GetConnectionString("(default)")));
     services.AddScoped<IProductRepository, ProductRepository>();
     services.AddScoped<ICartRepository, CartRepository>();
     services.AddScoped<IOrderRepository, OrderRepository>();
