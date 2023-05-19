@@ -19,7 +19,7 @@ builder.Services.AddAuthentication().AddGoogle(googleOptions =>
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
-AddRepository(builder.Services, builder.Configuration);
+AddRepositories(builder.Services, builder.Configuration);
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -43,9 +43,10 @@ app.MapRazorPages();
 
 app.Run();
 
-void AddRepository(IServiceCollection services, ConfigurationManager configuration)
+void AddRepositories(IServiceCollection services, ConfigurationManager configuration)
 {
     services.AddScoped<IProductRepository, ProductRepository>();
     services.AddScoped<ICartRepository, CartRepository>();
     services.AddScoped<IOrderRepository, OrderRepository>();
+    services.AddScoped<IContactRepository, ContactRepository>();
 }

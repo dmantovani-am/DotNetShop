@@ -17,5 +17,7 @@ public class DataContext : IdentityDbContext
     public DbSet<CartItem> CartItems => Set<CartItem>();
 
     public DbSet<Order> Orders => Set<Order>();
+
+    public DbSet<Contact> Contacts => Set<Contact>();
 }
 
