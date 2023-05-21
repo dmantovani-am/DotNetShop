@@ -49,4 +49,5 @@ void AddRepositories(IServiceCollection services, ConfigurationManager configura
     services.AddScoped<ICartRepository, CartRepository>();
     services.AddScoped<IOrderRepository, OrderRepository>();
     services.AddScoped<IContactRepository, ContactRepository>();
+    services.AddScoped<ITokenRepository, TokenRepository>();
 }

@@ -1,4 +1,6 @@
-﻿namespace DotNetShop.Data;
+﻿using Microsoft.EntityFrameworkCore;
+
+namespace DotNetShop.Data;
 
 public class OrderRepository : IOrderRepository
 {
@@ -28,5 +30,10 @@ public class OrderRepository : IOrderRepository
         await _context.SaveChangesAsync();
 
         await _cartRepository.Clear();
+    }
+
+    public async Task<List<Order>> GetAll()
+    {
+        return await _context.Orders.ToListAsync();
     }
 }

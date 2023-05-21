@@ -5,6 +5,10 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DotNetShop", "DotNetShop\DotNetShop.csproj", "{437C66DB-0DDD-4534-B757-ED7EBAEE580D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetShop.Api", "DotNetShop.Api\DotNetShop.Api.csproj", "{9F7A8E62-7651-4D9B-9232-74AA58D44CD6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotNetShop.Core", "DotNetShop.Core\DotNetShop.Core.csproj", "{3886E9C8-88CC-4366-BCF1-66699FB8181A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{437C66DB-0DDD-4534-B757-ED7EBAEE580D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{437C66DB-0DDD-4534-B757-ED7EBAEE580D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{437C66DB-0DDD-4534-B757-ED7EBAEE580D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F7A8E62-7651-4D9B-9232-74AA58D44CD6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F7A8E62-7651-4D9B-9232-74AA58D44CD6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F7A8E62-7651-4D9B-9232-74AA58D44CD6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F7A8E62-7651-4D9B-9232-74AA58D44CD6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3886E9C8-88CC-4366-BCF1-66699FB8181A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3886E9C8-88CC-4366-BCF1-66699FB8181A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3886E9C8-88CC-4366-BCF1-66699FB8181A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3886E9C8-88CC-4366-BCF1-66699FB8181A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
