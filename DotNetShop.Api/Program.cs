@@ -89,8 +89,10 @@ app.Run();
 
 void InjectRepositories(IServiceCollection services, ConfigurationManager configuration)
 {
+    var connectionString = configuration.GetConnectionString("(default)");
+
     var options = new DbContextOptionsBuilder<DataContext>()
-        .UseSqlite(configuration.GetConnectionString("(default)"))
+        .UseSqlite(connectionString)
         .Options;
 
     var dataContext = new DataContext(options);
@@ -100,9 +102,7 @@ void InjectRepositories(IServiceCollection services, ConfigurationManager config
     services.AddScoped<IRepository<Product>>(_ => new DataContextRepository<Product>(dataContext));
     services.AddScoped<IRepository<Category>>(_ => new DataContextRepository<Category>(dataContext));
 
-    // IOrderRepository dipende da ICartRepository, quindi devo iniettare comunque nel contenitore quest'ultima dipendenza anche se non necessaria per le API.
-    services.AddScoped<ICartRepository, MockCartRepository>();
-    services.AddScoped<IOrderRepository, OrderRepository>();
+    services.AddScoped<IOrderRepository>(_ => new OrderRepository(dataContext, null));
 }
 
 void MapRoutes<T>(string tag)
@@ -130,3 +130,4 @@ void MapOrderRoutes()
         .MapGet("/", (IOrderRepository repository) => repository.GetAll())
         .RequireAuthorization(PolicyName.IsAdmin);
 }
+
