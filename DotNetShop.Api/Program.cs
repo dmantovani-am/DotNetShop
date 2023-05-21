@@ -1,6 +1,9 @@
 using DotNetShop.Api.Data;
+using DotNetShop.Api.Infrastructure;
 using DotNetShop.Data;
+using DotNetShop.Infrastructure;
 using DotNetShop.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -24,7 +27,16 @@ builder.Services.AddAuthentication()
         };
     });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy(PolicyName.IsAdmin, policy =>
+    {
+        policy.AddRequirements(new RoleRequirement(Role.Admin));
+    });
+});
+
+// Attenzione! Gli handler dei requirement vanno registrati nel contenitore delle dipendenze altrimenti non vengono innescati.
+builder.Services.AddSingleton<IAuthorizationHandler, RoleRequirementHandler>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -116,5 +128,5 @@ void MapOrderRoutes()
 
     group
         .MapGet("/", (IOrderRepository repository) => repository.GetAll())
-        .RequireAuthorization();
+        .RequireAuthorization(PolicyName.IsAdmin);
 }
