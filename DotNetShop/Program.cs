@@ -2,6 +2,8 @@ using DotNetShop.Data;
 using DotNetShop.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion.Internal;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +22,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
 
 AddRepositories();
+
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
@@ -41,6 +44,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 app.MapRazorPages();
 
+await AddAdmin();
+
 app.Run();
 
 void AddRepositories()
@@ -55,3 +60,27 @@ void AddRepositories()
     services.AddScoped<ITokenRepository, TokenRepository>();
 }
 
+// Crea di default un utente "Admin".
+async Task AddAdmin()
+{
+    // I servizi IUserStore e UserManager richiedono uno scope.
+    var services = app!.Services!.CreateScope().ServiceProvider;
+
+    var configuration = new User();
+    app.Configuration.Bind("Admin", configuration);
+
+    var usersManager = services.GetRequiredService<UserManager<IdentityUser>>();
+
+    var user = new IdentityUser() { UserName = configuration.UserName! };
+    if ((await usersManager.CreateAsync(user, configuration.Password!)).Succeeded)
+    {
+        await usersManager.AddClaimAsync(user, new(nameof(Role), Role.Admin));
+    }
+}
+
+record User
+{
+    public string? UserName { get; set; }
+
+    public string? Password { get; set; }
+}
