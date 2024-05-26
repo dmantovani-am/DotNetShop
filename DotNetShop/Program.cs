@@ -8,15 +8,17 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("(default)") ?? throw new InvalidOperationException("Connection string 'DataContextConnection' not found.");
+
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlite(connectionString));
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<DataContext>();
 
-builder.Services.AddAuthentication().AddGoogle(googleOptions =>
-{
-    var configuration = builder.Configuration;
-    googleOptions.ClientId = configuration["Authentication:Google:ClientId"]!;
-    googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
-});
+builder.Services.AddAuthentication()
+    .AddGoogle(googleOptions =>
+    {
+        var configuration = builder.Configuration;
+        googleOptions.ClientId = configuration["Authentication:Google:ClientId"]!;
+        googleOptions.ClientSecret = configuration["Authentication:Google:ClientSecret"]!;
+    });
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSession();
@@ -74,7 +76,7 @@ async Task AddAdmin()
     var user = new IdentityUser() { UserName = configuration.UserName! };
     if ((await usersManager.CreateAsync(user, configuration.Password!)).Succeeded)
     {
-        await usersManager.AddClaimAsync(user, new(nameof(Role), Role.Admin));
+        await usersManager.AddClaimAsync(user, new("Role", Role.Admin));
     }
 }
 

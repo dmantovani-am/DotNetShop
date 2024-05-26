@@ -1,4 +1,4 @@
-﻿namespace DotNetShop.Models;
+﻿    namespace DotNetShop.Models;
 
 public record CartItem
 {
