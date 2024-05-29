@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Security.Cryptography;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,10 +34,16 @@ builder.Services.AddAuthorization(options =>
     {
         policy.AddRequirements(new RoleRequirement(Role.Admin));
     });
+
+    options.AddPolicy("@uniupo.it", policy =>
+    {
+        policy.AddRequirements(new UserNameRequirement());
+    });
 });
 
 // Attenzione! Gli handler dei requirement vanno registrati nel contenitore delle dipendenze altrimenti non vengono innescati.
 builder.Services.AddSingleton<IAuthorizationHandler, RoleRequirementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, UserNameRequirementHandler>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -131,3 +138,19 @@ void MapOrderRoutes()
         .RequireAuthorization(PolicyName.IsAdmin);
 }
 
+class UserNameRequirement : IAuthorizationRequirement
+{ }
+
+class UserNameRequirementHandler : AuthorizationHandler<UserNameRequirement>
+{
+    protected override Task HandleRequirementAsync(AuthorizationHandlerContext context, UserNameRequirement requirement)
+    {
+        /// TODO: fix this
+        if (context.User.HasClaim(c => c.Type == "email" && c.Value.EndsWith("@uniupo.it")))
+        {
+            context.Succeed(requirement);
+        }
+
+        return Task.CompletedTask;
+    }
+}
