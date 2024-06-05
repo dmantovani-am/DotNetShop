@@ -1,0 +1,46 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <!-- Senza jQuery -->
+    <script>
+        //document.addEventListener("DOMContentLoaded", function() {
+        //    var xhr = new XMLHttpRequest();
+        //    xhr.onloadend = function () {
+        //        var categories = JSON.parse(xhr.responseText);
+
+        //        for (var i = 0; i < categories.length; i++) {
+        //            var category = categories[i];
+
+        //            var categoryElement = document.createElement("div");
+        //            categoryElement.innerHTML = category.name;
+        //            document.body.appendChild(categoryElement);
+        //        }
+        //    }
+
+        //    xhr.open("GET", "https://localhost:7206/categories", true);
+        //    xhr.send();
+        //});
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $.get("https://localhost:7206/categories", function (categories) {
+                for (var i = 0; i < categories.length; i++) {
+                    var category = categories[i];
+
+                    var categoryElement = $("<div>");
+                    categoryElement.html(category.name);
+                    $("body").append(categoryElement);
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
